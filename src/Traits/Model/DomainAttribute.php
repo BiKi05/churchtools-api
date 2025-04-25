@@ -11,7 +11,11 @@ trait DomainAttribute
     protected ?string $frontendUrl = null;
     protected ?string $imageUrl = null;
     protected array $domainAttributes = [];
-
+    protected ?string $icon = null;
+    protected ?string $color = null;
+    protected ?string $initials = null;
+    protected array $infos = [];
+    
     /**
      * @return String|null
      */
