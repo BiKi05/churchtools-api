@@ -1,5 +1,4 @@
 <?php
-
 namespace CTApi\Models\Common\Tag;
 
 use CTApi\Models\AbstractModel;
@@ -13,19 +12,47 @@ class Tag extends AbstractModel
     use FillWithData;
 
     protected ?string $name = null;
+
+    protected ?string $description = null;
+
+    protected ?string $color = null;
+
+    /**
+     * @deprecated will not be replaced
+     */
     protected ?string $modifiedAt = null;
+
+    /**
+     * @deprecated will not be replaced
+     */
     protected ?string $modifiedBy = null;
+
+    /**
+     * @deprecated will not be replaced
+     */
     protected ?string $count = null;
 
+    protected function fillNonArrayType(string $key, $value): void
+    {
+        if ($key == "modifiedPid" || $key == "modifiedDate")
+            //deprecated fields
+            return;
+        $this->fillDefault($key, $value);
+    }
+
+    /**
+     * @deprecated will not be replaced
+     */
     public function requestModifier(): ?Person
     {
         if ($this->modifiedBy != null) {
-            return PersonRequest::find((int)$this->modifiedBy);
+            return PersonRequest::find((int) $this->modifiedBy);
         }
         return null;
     }
 
     /**
+     *
      * @param string|null $id
      * @return Tag
      */
@@ -35,6 +62,9 @@ class Tag extends AbstractModel
         return $this;
     }
 
+    /**
+     * @deprecated will not be replaced
+     */
     public function getModifiedAtAsDateTime(): ?\DateTimeImmutable
     {
         return CTDateTimeService::stringToDateTime($this->modifiedAt);
@@ -57,9 +87,46 @@ class Tag extends AbstractModel
         $this->name = $name;
         return $this;
     }
+    
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+    
+    /**
+     * @param string|null $description
+     * @return Tag
+     */
+    public function setDescription(?string $description): Tag
+    {
+        $this->description = $description;
+        return $this;
+    }
+    
+    /**
+     * @return string|null
+     */
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+    
+    /**
+     * @param string|null $color
+     * @return Tag
+     */
+    public function setColor(?string $color): Tag
+    {
+        $this->color = $color;
+        return $this;
+    }
 
     /**
      * @return string|null
+     * @deprecated will not be replaced
      */
     public function getModifiedAt(): ?string
     {
@@ -69,6 +136,7 @@ class Tag extends AbstractModel
     /**
      * @param string|null $modifiedAt
      * @return Tag
+     * @deprecated will not be replaced
      */
     public function setModifiedAt(?string $modifiedAt): Tag
     {
@@ -78,6 +146,7 @@ class Tag extends AbstractModel
 
     /**
      * @return string|null
+     * @deprecated will not be replaced
      */
     public function getModifiedBy(): ?string
     {
@@ -87,6 +156,7 @@ class Tag extends AbstractModel
     /**
      * @param string|null $modifiedBy
      * @return Tag
+     * @deprecated will not be replaced
      */
     public function setModifiedBy(?string $modifiedBy): Tag
     {
@@ -96,6 +166,7 @@ class Tag extends AbstractModel
 
     /**
      * @return string|null
+     * @deprecated will not be replaced
      */
     public function getCount(): ?string
     {
@@ -105,6 +176,7 @@ class Tag extends AbstractModel
     /**
      * @param string|null $count
      * @return Tag
+     * @deprecated will not be replaced
      */
     public function setCount(?string $count): Tag
     {
