@@ -8,6 +8,7 @@ use CTApi\Models\Common\Domain\Meta;
 use CTApi\Traits\Model\ExtractData;
 use CTApi\Traits\Model\FillWithData;
 use CTApi\Traits\Model\MetaAttribute;
+use CTApi\Models\Common\Tag\Tag;
 
 class Song extends AbstractModel implements UpdatableModel
 {
@@ -35,6 +36,7 @@ class Song extends AbstractModel implements UpdatableModel
     protected ?string $key = null;
     protected ?string $bpm = null;
     protected ?bool $isDefault = null;
+    protected ?array $tags = null;
 
     public static function getModifiableAttributes(): array
     {
@@ -60,6 +62,9 @@ class Song extends AbstractModel implements UpdatableModel
                 break;
             case "meta":
                 $this->setMeta(Meta::createModelFromData($data));
+                break;
+            case "tags":
+                $this->setTags(Tag::createModelsFromArray($data));
                 break;
             default:
                 $this->fillDefault($key, $data);
@@ -376,6 +381,27 @@ class Song extends AbstractModel implements UpdatableModel
     public function setIsDefault(?bool $isDefault): Song
     {
         $this->isDefault = $isDefault;
+        return $this;
+    }
+    
+    /**
+     * @return array|null
+     */
+    public function getTags(): ?array
+    {
+        if ($this->tags === null) {
+            $this->setTags($this->requestTags()->get());
+        }
+        return $this->tags;
+    }
+    
+    /**
+     * @param array $tags
+     * @return Song
+     */
+    public function setTags(array $tags): Song
+    {
+        $this->tags = $tags;
         return $this;
     }
 }

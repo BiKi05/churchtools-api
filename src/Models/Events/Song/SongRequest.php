@@ -4,9 +4,12 @@ namespace CTApi\Models\Events\Song;
 
 class SongRequest
 {
-    public static function all(): array
+    public static function all(bool $includeTags = false): array
     {
-        return (new SongRequestBuilder())->all();
+        if (!$includeTags)
+            return (new SongRequestBuilder())->all();
+        else 
+            return (new SongRequestBuilder())->where("include", "tags")->get();
     }
 
     public static function where(string $key, $value): SongRequestBuilder
