@@ -6,6 +6,7 @@ use CTApi\Models\AbstractModel;
 use CTApi\Models\Common\Domain\Meta;
 use CTApi\Models\Common\File\FileRequest;
 use CTApi\Models\Common\File\FileRequestBuilder;
+use CTApi\Models\Common\Tag\Tag;
 use CTApi\Models\Groups\GroupMeeting\GroupMeetingRequestBuilder;
 use CTApi\Models\Groups\GroupMember\GroupMemberRequestBuilder;
 use CTApi\Models\Groups\Person\Person;
@@ -25,7 +26,8 @@ class Group extends AbstractModel
     protected ?GroupSettings $settings = null;
     protected array $followUp = [];
     protected array $roles = [];
-
+    
+    protected ?array $tags = null;
 
     protected function fillNonArrayType(string $key, $value): void
     {
@@ -64,6 +66,9 @@ class Group extends AbstractModel
                     $this->meta = new Meta();
                 }
                 $this->meta->setModifiedPerson(Person::createModelFromData($data));
+                break;
+            case "tags":
+                $this->setTags(Tag::createModelsFromArray($data));
                 break;
             default:
                 $this->fillDefault($key, $data);
@@ -273,6 +278,27 @@ class Group extends AbstractModel
     public function setRoles(array $roles): Group
     {
         $this->roles = $roles;
+        return $this;
+    }
+    
+    /**
+     * @return array|null
+     */
+    public function getTags(): ?array
+    {
+        if ($this->tags === null) {
+            $this->setTags($this->requestTags()->get());
+        }
+        return $this->tags;
+    }
+    
+    /**
+     * @param array $tags
+     * @return Group
+     */
+    public function setTags(array $tags): Group
+    {
+        $this->tags = $tags;
         return $this;
     }
 }

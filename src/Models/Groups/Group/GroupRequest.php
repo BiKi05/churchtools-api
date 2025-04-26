@@ -1,12 +1,15 @@
 <?php
-
 namespace CTApi\Models\Groups\Group;
 
 class GroupRequest
 {
-    public static function all(): array
+
+    public static function all(bool $includeTags = false): array
     {
-        return (new GroupRequestBuilder())->all();
+        if (!$includeTags)
+            return (new GroupRequestBuilder())->all();
+        else
+            return (new GroupRequestBuilder())->where("include", "tags")->get();
     }
 
     public static function where(string $key, $value): GroupRequestBuilder
@@ -28,5 +31,4 @@ class GroupRequest
     {
         return (new GroupRequestBuilder())->find($id);
     }
-
 }
