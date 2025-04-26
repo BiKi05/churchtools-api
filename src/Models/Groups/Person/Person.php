@@ -7,6 +7,7 @@ use CTApi\Models\AbstractModel;
 use CTApi\Models\Common\Domain\Meta;
 use CTApi\Models\Common\File\FileRequest;
 use CTApi\Models\Common\File\FileRequestBuilder;
+use CTApi\Models\Common\Tag\Tag;
 use CTApi\Models\Events\Absence\AbsencePersonRequestBuilder;
 use CTApi\Traits\Model\ExtractData;
 use CTApi\Traits\Model\FillWithData;
@@ -85,6 +86,8 @@ class Person extends AbstractModel implements UpdatableModel
 
     protected ?string $invitationStatus = null;
     protected ?bool $isArchived = null;
+    
+    protected ?array $tags = null;
 
     protected ?Meta $meta = null;
 
@@ -107,6 +110,9 @@ class Person extends AbstractModel implements UpdatableModel
                 break;
             case "domainAttributes":
                 $this->processDomainAttributes($data);
+                break;
+            case "tags":
+                $this->setTags(Tag::createModelsFromArray($data));
                 break;
             default:
                 $this->fillDefault($key, $data);
@@ -1229,6 +1235,27 @@ class Person extends AbstractModel implements UpdatableModel
     public function setIsArchived(?bool $isArchived): Person
     {
         $this->isArchived = $isArchived;
+        return $this;
+    }
+    
+    /**
+     * @return array|null
+     */
+    public function getTags(): ?array
+    {
+        if ($this->tags === null) {
+            $this->setTags($this->requestTags()->get());
+        }
+        return $this->tags;
+    }
+    
+    /**
+     * @param array $tags
+     * @return Person
+     */
+    public function setTags(array $tags): Person
+    {
+        $this->tags = $tags;
         return $this;
     }
 }
