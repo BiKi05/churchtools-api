@@ -37,6 +37,9 @@ class SongArrangement extends AbstractModel implements UpdatableModel
      */
     protected ?string $note = null;
     protected ?string $description = null;
+    protected ?string $sourceName = null;
+    protected ?string $sourceReference = null;
+    
     protected array $links = [];
     protected array $files = [];
 
@@ -52,14 +55,6 @@ class SongArrangement extends AbstractModel implements UpdatableModel
         ];
     }
 
-    protected function fillNonArrayType(string $key, $value): void
-    {
-        if ($key == "sourceReference" || $key == "sourceName")
-            //empty/unused fields
-            return;
-        $this->fillDefault($key, $value);
-    }
-    
     protected function fillArrayType(string $key, array $data): void
     {
         switch ($key) {
@@ -319,6 +314,42 @@ class SongArrangement extends AbstractModel implements UpdatableModel
     public function setDescription(?string $description): SongArrangement
     {
         $this->description = $description;
+        return $this;
+    }
+    
+    /**
+     * @return string|null
+     */
+    public function getSourceName(): ?string
+    {
+        return $this->sourceName;
+    }
+    
+    /**
+     * @param string|null $sourceName
+     * @return SongArrangement
+     */
+    public function setSourceName(?string $sourceName): SongArrangement
+    {
+        $this->sourceName = $sourceName;
+        return $this;
+    }
+    
+    /**
+     * @return string|null
+     */
+    public function getSourceReference(): ?string
+    {
+        return $this->sourceReference;
+    }
+    
+    /**
+     * @param string|null $sourceReference
+     * @return SongArrangement
+     */
+    public function setSourceReference(?string $sourceReference): SongArrangement
+    {
+        $this->sourceReference = $sourceReference;
         return $this;
     }
 
